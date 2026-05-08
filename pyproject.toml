@@ -1,0 +1,19 @@
+[build-system]
+requires = ["hatchling >= 1.26"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/two_step_stress"]
+
+[project]
+name = "two-step-stress"
+version = "0.1.0"
+description = "PsychoPy implementation of the two-step decision task with cognitive load manipulation"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "pandas",
+    "scipy",
+    "statsmodels",
+    "matplotlib",
+]
