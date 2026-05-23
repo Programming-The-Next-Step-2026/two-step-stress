@@ -16,6 +16,7 @@ dependencies = [
     "scipy",
     "statsmodels",
     "matplotlib",
+    "psychopy",
 ]
 
 [project.optional-dependencies]
