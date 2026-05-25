@@ -73,7 +73,7 @@ All live in `config.py`:
 - **Transitions.** Common p = 0.7, rare p = 0.3. Each Stage-1 action has its own preferred Stage-2 state. Mapping fixed per participant, counterbalanced across participants.
 - **Reward probabilities.** Four independent Gaussian random walks, σ = 0.025, reflecting boundaries [0.25, 0.75], independent seeds per participant logged to data.
 - **Reward.** Binary (1/0).
-- **Timing.** Stage-1 response window 2000 ms, Stage-2 response window 2000 ms, ITI 1000 ms, feedback 1000 ms. Use frame-locked presentation (`win.flip()`-driven), not `core.wait`, for stimulus onsets that matter.
+- **Timing.** Stage-1 response window 2000 ms, Stage-2 response window 2000 ms, transition reveal 700 ms, ITI 1000 ms, feedback 1000 ms. Use frame-locked presentation (`win.flip()`-driven), not `core.wait`, for stimulus onsets that matter.
 - **Cognitive load.** Within-subject, blocked (not interleaved trial-by-trial — too noisy). 2 load blocks and 2 no-load blocks, order ABBA / BAAB counterbalanced. In load blocks: a letter appears for 500 ms at trial start; participant must indicate (key press) whether it matches the letter from the *previous* trial in that block (1-back). The 1-back response is collected during the Stage-1 decision window. Letters drawn from a fixed consonant set; ~33% match rate.
 - **Keys.** Stage-1/Stage-2 choice on `f` / `j`. 1-back match/no-match on `z` / `m`. Document in instructions and store in config.
 - **Cover story.** Spaceships → planets → aliens with treasure (Decker et al., 2016). Same in load and no-load.

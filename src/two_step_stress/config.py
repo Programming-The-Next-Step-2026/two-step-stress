@@ -24,7 +24,8 @@ STAGE1_WINDOW_MS: int = 2000
 STAGE2_WINDOW_MS: int = 2000
 ITI_MS: int = 1000
 FEEDBACK_MS: int = 1000
-NBACK_LETTER_MS: int = 500  # duration the 1-back letter is displayed
+NBACK_LETTER_MS: int = 500       # duration the 1-back letter is displayed
+TRANSITION_REVEAL_MS: int = 700  # Stage-1 → Stage-2 transition reveal (planet arrival)
 
 # Cognitive-load block structure
 N_LOAD_BLOCKS: int = 2
