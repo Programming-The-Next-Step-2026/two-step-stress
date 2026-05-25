@@ -129,12 +129,13 @@ def run_practice(
 ) -> None:
     """Run the 12-trial practice block (8 no-load, then 4 load).
 
-    Practice uses its OWN reward walk (the ``reward_probs`` array passed here,
-    which ``run_experiment`` initialises separately from the main session) and
-    its OWN 1-back letter stream (generated below), so neither depletes the
-    main session's pre-built sequences.  All practice trials are logged with
-    ``block=0`` / ``block_type="practice"`` and show explicit COMMON/RARE
-    transition feedback.
+    The ``reward_probs`` array passed here is the single, continuous session
+    reward walk (initialised once in ``run_experiment`` before practice and
+    threaded through practice and all main blocks): practice trials advance it
+    in place, exactly like main trials.  Practice does, however, use its OWN
+    1-back letter stream (generated below) so it doesn't consume the main
+    blocks' letter streams.  All practice trials are logged with ``block=0`` /
+    ``block_type="practice"`` and show explicit COMMON/RARE transition feedback.
     """
     logger.info(
         "Practice block start (%d trials: %d no-load + %d load)",
