@@ -80,7 +80,7 @@ All live in `config.py`:
 
 ## Data schema
 
-One CSV per participant in `data/sub-<id>_<timestamp>.csv`. One row per trial. Columns:
+One CSV per participant in `data/raw/sub-<id>_<timestamp>.csv`. One row per trial. Columns:
 
 `participant_id, block, block_type (load|no_load), trial_in_block, trial_global, stage1_choice, stage1_rt, transition (common|rare), stage2_state, stage2_choice, stage2_rt, reward, reward_probs (json of 4 floats at trial start), nback_letter, nback_is_match, nback_response, nback_correct, nback_rt, timestamp`
 
