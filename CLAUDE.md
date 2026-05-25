@@ -69,7 +69,7 @@ Keep modules small and single-purpose. The trial loop in `trial.py` should be re
 
 All live in `config.py`:
 
-- **Trials.** 200 main trials, split into 4 blocks of 50 with breaks. 20 practice trials with explicit transition feedback.
+- **Trials.** 200 main trials, split into 4 blocks of 50 with breaks. 12 practice trials (8 no-load + 4 load) with explicit transition feedback.
 - **Transitions.** Common p = 0.7, rare p = 0.3. Each Stage-1 action has its own preferred Stage-2 state. Mapping fixed per participant, counterbalanced across participants.
 - **Reward probabilities.** Four independent Gaussian random walks, σ = 0.025, reflecting boundaries [0.25, 0.75], independent seeds per participant logged to data.
 - **Reward.** Binary (1/0).

@@ -70,6 +70,9 @@ ALIEN_LABEL_HEIGHT: float = 0.09
 REWARD_RADIUS: float = 0.16
 REWARD_TEXT_HEIGHT: float = 0.10
 
+# Transition-reveal label (practice only: "COMMON" / "RARE" across the planet).
+REVEAL_LABEL_HEIGHT: float = 0.07
+
 # Text sizes.
 FIX_HEIGHT: float = 0.06
 NBACK_HEIGHT: float = 0.16
@@ -104,11 +107,16 @@ class Stage1Stims:
 
 @dataclass
 class TransitionStims:
-    """Chosen rocket arriving at the (colour-coded) destination planet."""
+    """Chosen rocket arriving at the (colour-coded) destination planet.
+
+    ``label`` carries the optional "COMMON"/"RARE" practice feedback drawn
+    across the planet (empty/hidden in the main task).
+    """
 
     planet: visual.Circle
     ship_body: visual.Rect
     ship_nose: visual.ShapeStim
+    label: visual.TextStim
 
 
 @dataclass
@@ -272,6 +280,7 @@ def build_transition(win: visual.Window) -> TransitionStims:
         planet=_planet(win, PLANET_RADIUS_REVEAL, REVEAL_PLANET_POS),
         ship_body=ship_body,
         ship_nose=ship_nose,
+        label=_text(win, "", REVEAL_LABEL_HEIGHT, REVEAL_PLANET_POS),
     )
 
 
@@ -400,12 +409,20 @@ def draw_transition(
     stims: TransitionStims,
     stage2_state: int,
     counter: visual.TextStim,
+    label_text: str | None = None,
 ) -> float:
-    """Draw the transition reveal (planet backdrop + arriving ship) and flip."""
+    """Draw the transition reveal (planet backdrop + arriving ship) and flip.
+
+    If ``label_text`` is given (practice only), it is drawn across the planet
+    as explicit "COMMON"/"RARE" feedback.
+    """
     stims.planet.fillColor = PLANET_COLORS[stage2_state]
     stims.planet.draw()
     stims.ship_body.draw()
     stims.ship_nose.draw()
+    if label_text is not None:
+        stims.label.text = label_text
+        stims.label.draw()
     counter.draw()
     return win.flip()
 

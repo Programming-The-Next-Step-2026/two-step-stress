@@ -191,6 +191,7 @@ def run_trial(
     trial_global: int,
     nback_letter: str | None = None,
     nback_is_match: bool | None = None,
+    show_transition_label: bool = False,
 ) -> dict:
     """Run one two-step trial and return its log row.
 
@@ -222,6 +223,9 @@ def run_trial(
         The 1-back letter for this trial (load blocks only); ``None`` in no-load.
     nback_is_match : bool or None
         Whether ``nback_letter`` matches the previous trial's letter.
+    show_transition_label : bool
+        If True (practice only), draw "COMMON"/"RARE" across the planet during
+        the transition reveal.
 
     Returns
     -------
@@ -301,10 +305,13 @@ def run_trial(
     row["transition"] = transition_type
     row["stage2_state"] = stage2_state
 
-    # 4. Transition reveal (planet arrival).
+    # 4. Transition reveal (planet arrival; "COMMON"/"RARE" label in practice).
+    label_text = transition_type.upper() if show_transition_label else None
     _hold(
         win,
-        lambda: screens.draw_transition(win, stims.transition, stage2_state, stims.counter),
+        lambda: screens.draw_transition(
+            win, stims.transition, stage2_state, stims.counter, label_text=label_text
+        ),
         _ms_to_frames(TRANSITION_REVEAL_MS, frame_rate),
     )
 
