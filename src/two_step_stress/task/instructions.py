@@ -8,6 +8,10 @@ normal exit.
 
 Screen flow over a session (driven by ``run_experiment``):
     welcome → instructions → practice → [banner → block → break] × 4 → end
+
+The ``frame_rate`` argument on the message screens is unused (they are not
+frame-locked); it is kept for a uniform call signature across the screen API
+and is used for real by :func:`run_practice`, which runs trials.
 """
 
 from __future__ import annotations
@@ -94,7 +98,21 @@ def _wait(keys: list[str]) -> str:
 
 
 def show_welcome(win: visual.Window, stims: screens.SessionStimuli, frame_rate: float) -> None:
-    """Show the one-screen welcome; advance on SPACE."""
+    """Show the one-screen welcome and wait for SPACE.
+
+    Parameters
+    ----------
+    win : psychopy.visual.Window
+        The open window.
+    stims : screens.SessionStimuli
+        Pre-built stimuli (the reusable message screen is used).
+    frame_rate : float
+        Measured refresh rate; unused here (kept for a uniform screen API).
+
+    Returns
+    -------
+    None
+    """
     logger.info("Screen: welcome")
     screens.set_message(stims.message, WELCOME_TEXT, "Press SPACE to begin")
     screens.show_message(win, stims.message)
@@ -104,7 +122,21 @@ def show_welcome(win: visual.Window, stims: screens.SessionStimuli, frame_rate: 
 def show_instructions(
     win: visual.Window, stims: screens.SessionStimuli, frame_rate: float
 ) -> None:
-    """Show the multi-page instructions; SPACE forward, BACKSPACE back."""
+    """Show the multi-page instructions; SPACE advances, BACKSPACE goes back.
+
+    Parameters
+    ----------
+    win : psychopy.visual.Window
+        The open window.
+    stims : screens.SessionStimuli
+        Pre-built stimuli (the reusable message screen is used).
+    frame_rate : float
+        Measured refresh rate; unused here (kept for a uniform screen API).
+
+    Returns
+    -------
+    None
+    """
     logger.info("Screen: instructions (%d pages)", len(INSTRUCTION_PAGES))
     idx = 0
     while idx < len(INSTRUCTION_PAGES):
@@ -136,6 +168,29 @@ def run_practice(
     1-back letter stream (generated below) so it doesn't consume the main
     blocks' letter streams.  All practice trials are logged with ``block=0`` /
     ``block_type="practice"`` and show explicit COMMON/RARE transition feedback.
+
+    Parameters
+    ----------
+    win : psychopy.visual.Window
+        The open window.
+    stims : screens.SessionStimuli
+        Pre-built stimuli.
+    rng : numpy.random.Generator
+        The participant RNG (shared with the main session).
+    mapping : TransitionMapping
+        The participant's Stage-1 → Stage-2 common-transition mapping.
+    reward_probs : numpy.ndarray, shape (4,)
+        The continuous session reward walk; advanced in place by each trial.
+    frame_rate : float
+        Measured refresh rate, passed through to :func:`run_trial`.
+    writer : TrialWriter
+        Open CSV writer; practice rows are written with ``participant_id`` set.
+    participant_id : str
+        Participant identifier, stamped onto each logged row.
+
+    Returns
+    -------
+    None
     """
     logger.info(
         "Practice block start (%d trials: %d no-load + %d load)",
@@ -190,7 +245,25 @@ def show_block_banner(
     block_num: int,
     block_type: str,
 ) -> None:
-    """Show the pre-block banner naming the upcoming condition; advance on SPACE."""
+    """Show the pre-block banner naming the upcoming condition; advance on SPACE.
+
+    Parameters
+    ----------
+    win : psychopy.visual.Window
+        The open window.
+    stims : screens.SessionStimuli
+        Pre-built stimuli (the reusable message screen is used).
+    frame_rate : float
+        Measured refresh rate; unused here (kept for a uniform screen API).
+    block_num : int
+        The upcoming block number (1-based).
+    block_type : str
+        ``"load"`` or ``"no_load"``; selects the banner wording.
+
+    Returns
+    -------
+    None
+    """
     logger.info("Screen: block %d banner (%s)", block_num, block_type)
     if block_type == "load":
         desc = (
@@ -211,7 +284,23 @@ def show_block_banner(
 def show_break(
     win: visual.Window, stims: screens.SessionStimuli, frame_rate: float, block_num: int
 ) -> None:
-    """Show the between-block break screen; advance on SPACE."""
+    """Show the between-block break screen; advance on SPACE.
+
+    Parameters
+    ----------
+    win : psychopy.visual.Window
+        The open window.
+    stims : screens.SessionStimuli
+        Pre-built stimuli (the reusable message screen is used).
+    frame_rate : float
+        Measured refresh rate; unused here (kept for a uniform screen API).
+    block_num : int
+        The block just completed (1-based).
+
+    Returns
+    -------
+    None
+    """
     logger.info("Screen: break after block %d", block_num)
     screens.set_message(
         stims.message,
@@ -230,7 +319,23 @@ def show_end(
     frame_rate: float,
     total_treasure: int,
 ) -> None:
-    """Show the debrief / end screen; exit on SPACE or ESCAPE (no abort)."""
+    """Show the debrief / end screen; exit on SPACE or ESCAPE (no abort).
+
+    Parameters
+    ----------
+    win : psychopy.visual.Window
+        The open window.
+    stims : screens.SessionStimuli
+        Pre-built stimuli (the reusable message screen is used).
+    frame_rate : float
+        Measured refresh rate; unused here (kept for a uniform screen API).
+    total_treasure : int
+        The participant's final treasure total, shown on screen.
+
+    Returns
+    -------
+    None
+    """
     logger.info("Screen: end (total_treasure=%d)", total_treasure)
     screens.set_message(
         stims.message,

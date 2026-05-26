@@ -72,7 +72,22 @@ def _draw_panel(
 
 
 def plot_stay_probability_2x2(stay_df: pd.DataFrame, save_path=None) -> plt.Figure:
-    """Daw-2011-style 2 x 2 stay-probability bar chart (single panel)."""
+    """Plot the Daw-2011-style 2 x 2 stay-probability bar chart (single panel).
+
+    Parameters
+    ----------
+    stay_df : pandas.DataFrame
+        Output of ``compute_stay_probability`` (without splitting); must have
+        ``reward``, ``transition``, ``stay_prob``, ``ci_lower``, ``ci_upper``.
+    save_path : str or pathlib.Path, optional
+        If given, the figure is saved there at 150 dpi.
+
+    Returns
+    -------
+    matplotlib.figure.Figure
+        The figure (bars grouped by transition, coloured by previous reward,
+        with bootstrap-CI error bars).
+    """
     fig, ax = plt.subplots(figsize=(6, 5))
     _draw_panel(ax, stay_df, title="Stay probability")
     fig.tight_layout()
@@ -82,7 +97,21 @@ def plot_stay_probability_2x2(stay_df: pd.DataFrame, save_path=None) -> plt.Figu
 
 
 def plot_stay_probability_by_load(stay_df_split: pd.DataFrame, save_path=None) -> plt.Figure:
-    """Two-panel stay plot: load (left) vs no_load (right), shared y-axis."""
+    """Plot the stay probability as two panels: load (left) vs no_load (right).
+
+    Parameters
+    ----------
+    stay_df_split : pandas.DataFrame
+        Output of ``compute_stay_probability(split_by_block_type=True)``; must
+        additionally have a ``block_type`` column (``load`` / ``no_load``).
+    save_path : str or pathlib.Path, optional
+        If given, the figure is saved there at 150 dpi.
+
+    Returns
+    -------
+    matplotlib.figure.Figure
+        A two-panel figure with a shared y-axis and a single shared legend.
+    """
     fig, axes = plt.subplots(1, 2, figsize=(11, 5), sharey=True)
     for ax, block_type, title in (
         (axes[0], "load", "Load"),
@@ -102,7 +131,21 @@ def plot_stay_probability_by_load(stay_df_split: pd.DataFrame, save_path=None) -
 
 
 def plot_nback_accuracy(accuracy_dict: dict, save_path=None) -> plt.Figure:
-    """Bar chart of per-block 1-back accuracy with a chance line at 0.5."""
+    """Plot per-block 1-back accuracy as a bar chart with a chance line at 0.5.
+
+    Parameters
+    ----------
+    accuracy_dict : dict
+        Output of ``nback_accuracy`` — its ``per_block_accuracy`` mapping
+        (``{block: accuracy}``) is plotted.
+    save_path : str or pathlib.Path, optional
+        If given, the figure is saved there at 150 dpi.
+
+    Returns
+    -------
+    matplotlib.figure.Figure
+        A bar chart (one bar per load block) with a dashed chance line at 0.5.
+    """
     per_block = accuracy_dict["per_block_accuracy"]
     blocks = sorted(per_block)
     values = [per_block[b] for b in blocks]

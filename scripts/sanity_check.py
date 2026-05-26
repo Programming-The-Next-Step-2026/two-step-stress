@@ -19,12 +19,46 @@ SEED     = 42
 
 
 def softmax_choice(q: np.ndarray, rng: np.random.Generator) -> int:
+    """Sample an action from a softmax over action values.
+
+    Parameters
+    ----------
+    q : numpy.ndarray
+        Action values (one per available action).
+    rng : numpy.random.Generator
+        Random generator used to draw the choice.
+
+    Returns
+    -------
+    int
+        Index of the chosen action, drawn with probability proportional to
+        ``exp(BETA * q)``.
+    """
     e = np.exp(BETA * (q - q.max()))
     return int(rng.choice(len(q), p=e / e.sum()))
 
 
 def simulate(mode: str, rng: np.random.Generator) -> list[tuple]:
-    """Return list of (stage1_choice, reward, transition_type) per trial."""
+    """Run one agent through ``N_TRIALS`` of the real two-step engine.
+
+    Both agents use SARSA(0) learning at Stage 2 and differ only at Stage 1:
+    the model-free agent reinforces the chosen Stage-1 action with the same
+    reward-prediction error, whereas the model-based agent re-derives Stage-1
+    values each trial from the Stage-2 values, weighted by the known 70/30
+    transition structure.
+
+    Parameters
+    ----------
+    mode : str
+        ``"mf"`` (model-free) or ``"mb"`` (model-based).
+    rng : numpy.random.Generator
+        Random generator driving choices, transitions, rewards, and the walk.
+
+    Returns
+    -------
+    list of tuple
+        One ``(stage1_choice, reward, transition_type)`` tuple per trial.
+    """
     mapping       = build_transition_mapping(0)
     reward_probs  = initialise_reward_probs(rng)
     q2 = np.full((2, 2), 0.5)   # Stage-2 Q-values [state, action]

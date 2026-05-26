@@ -212,7 +212,19 @@ def _session_metadata(
 
 
 def main() -> None:
-    """Run one full session of the two-step task."""
+    """Run one full session of the two-step task.
+
+    Parses CLI arguments, collects participant info (CLI or GUI dialog), seeds
+    the RNG, opens and calibrates the window, then drives the session —
+    welcome, instructions, optional practice, four main blocks with banners and
+    breaks, and the end screen — logging one CSV row per trial.  On normal exit
+    or an Escape ``KeyboardInterrupt`` it flushes the CSV, writes the session
+    JSON sidecar, and closes the window cleanly.
+
+    Returns
+    -------
+    None
+    """
     start_time = time.time()
     args = _parse_args()
     logging.basicConfig(

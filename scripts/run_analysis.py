@@ -26,6 +26,17 @@ from two_step_stress.analysis.stay_probability import compute_stay_probability
 
 
 def main() -> None:
+    """Run the full single-participant analysis from the command line.
+
+    Loads the CSV named by ``--csv``, cleans it for the stay analysis, computes
+    the overall and load-split stay probabilities and the 1-back manipulation
+    check, prints the manipulation-check summary, and saves the three figures
+    to ``figures/sub-<id>/``.
+
+    Returns
+    -------
+    None
+    """
     parser = argparse.ArgumentParser(description="Analyse a two-step participant CSV.")
     parser.add_argument("--csv", required=True, help="Path to a participant CSV.")
     args = parser.parse_args()

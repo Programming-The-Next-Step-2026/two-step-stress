@@ -60,7 +60,20 @@ def nback_accuracy(df: pd.DataFrame) -> dict:
 
 
 def summarise(df: pd.DataFrame) -> str:
-    """Return a human-readable 1-back manipulation-check summary string."""
+    """Return a human-readable 1-back manipulation-check summary string.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        Full session (output of :func:`io.load_session`).
+
+    Returns
+    -------
+    str
+        A multi-line summary of overall and per-block 1-back accuracy, the
+        responded/missed counts, and a below-chance exclusion warning where
+        applicable.
+    """
     acc = nback_accuracy(df)
     lines = ["1-back manipulation check (load blocks):"]
 
