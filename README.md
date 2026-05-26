@@ -33,6 +33,20 @@ only (NumPy, pandas, scipy, statsmodels, matplotlib). PsychoPy is an optional
 `task` extra, needed only for stimulus presentation in the live experiment —
 so the engine, analysis pipeline, tests, and vignette all run without it.
 
+### On Ubuntu / Linux
+
+The commands above work as-is on macOS. On Linux, PsychoPy needs two extra
+steps: wxPython has no Linux wheel on PyPI (so it must come from conda), and
+Qt6's startup dialog requires the `libxcb-cursor0` system library.
+
+```bash
+conda create -n stress -c conda-forge python=3.11
+conda activate stress
+conda install -c conda-forge wxpython     # GTK/GL stack; no PyPI Linux wheel
+pip install -e ".[task,dev]"
+sudo apt install libxcb-cursor0           # for PsychoPy's Qt6 startup dialog
+```
+
 ## Running
 
 - Experiment: `python -m two_step_stress.task.run_experiment` (needs the `task` extra)
