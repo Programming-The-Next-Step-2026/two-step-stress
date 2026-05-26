@@ -1,0 +1,20 @@
+# Reproducible environment for two-step-stress (macOS and Linux).
+#
+# From the repo root:
+#     conda env create -f environment.yml
+#     conda activate stress
+# On Ubuntu / Linux also run:
+#     sudo apt install libxcb-cursor0   # PsychoPy's Qt6 startup dialog
+#
+# conda provides its own Python 3.11 (independent of any system Python) plus
+# wxPython, which has no Linux PyPI wheel; pip then installs the package with
+# its task + dev extras.
+name: stress
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - wxpython          # PsychoPy GUI stack; no Linux PyPI wheel, so comes from conda
+  - pip
+  - pip:
+      - -e .[task,dev]

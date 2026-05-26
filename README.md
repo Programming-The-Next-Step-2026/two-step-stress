@@ -12,40 +12,53 @@ performing a 1-back letter task during the deliberation period of load blocks.
 
 ## Installation
 
-Use **Python 3.11**. PsychoPy does not build on Python 3.13+, so the package
-pins `requires-python = ">=3.11,<3.12"`.
+This project needs **Python 3.11** — PsychoPy does not build on newer Pythons,
+so the package pins `requires-python = ">=3.11,<3.12"`.
 
-For development — running the tests and re-executing the tutorial notebook
-(no PsychoPy needed):
+### Recommended: conda (all platforms)
 
-```bash
-pip install -e ".[dev]"
-```
-
-To also run the live experiment locally (adds PsychoPy):
+`conda` installs its *own* Python 3.11 into an isolated environment, so this
+works regardless of which Python you already have — a system Python 3.12/3.13
+is fine, conda doesn't touch it. From the repo root:
 
 ```bash
-pip install -e ".[task,dev]"
-```
-
-The base install (`pip install -e .`) provides the engine and analysis layer
-only (NumPy, pandas, scipy, statsmodels, matplotlib). PsychoPy is an optional
-`task` extra, needed only for stimulus presentation in the live experiment —
-so the engine, analysis pipeline, tests, and vignette all run without it.
-
-### On Ubuntu / Linux
-
-The commands above work as-is on macOS. On Linux, PsychoPy needs two extra
-steps: wxPython has no Linux wheel on PyPI (so it must come from conda), and
-Qt6's startup dialog requires the `libxcb-cursor0` system library.
-
-```bash
-conda create -n stress -c conda-forge python=3.11
+conda env create -f environment.yml   # `stress` env: Python 3.11, wxPython, and the package
 conda activate stress
-conda install -c conda-forge wxpython     # GTK/GL stack; no PyPI Linux wheel
-pip install -e ".[task,dev]"
-sudo apt install libxcb-cursor0           # for PsychoPy's Qt6 startup dialog
 ```
+
+On **Ubuntu / Linux**, also install one system library — Qt6's startup dialog
+needs it (wxPython is already handled by conda above):
+
+```bash
+sudo apt install libxcb-cursor0
+```
+
+Verify the install:
+
+```bash
+pytest -q          # expect: 55 passed
+```
+
+### Already have Python 3.11? (venv shortcut)
+
+If a 3.11 interpreter already exists on your machine, a plain venv works.
+(`venv` cannot *create* 3.11 for you — install it first via pyenv, Homebrew, or
+python.org if you only have a newer Python.)
+
+```bash
+python3.11 -m venv .venv && source .venv/bin/activate
+pip install -e ".[task,dev]"   # or ".[dev]" for tests + analysis only (no PsychoPy)
+```
+
+On Linux, prefer the conda path above: pip has no wxPython wheel for Linux, so
+this route would try to compile wxPython from source.
+
+### What the extras mean
+
+- base (`pip install -e .`) — engine + analysis only (NumPy, pandas, scipy,
+  statsmodels, matplotlib)
+- `task` — adds PsychoPy, needed only to run the live experiment
+- `dev` — adds pytest, nbconvert, ipykernel (tests + vignette execution)
 
 ## Running
 
