@@ -9,7 +9,7 @@ packages = ["src/two_step_stress"]
 name = "two-step-stress"
 version = "0.1.0"
 description = "PsychoPy implementation of the two-step decision task with cognitive load manipulation"
-requires-python = ">=3.10"
+requires-python = ">=3.11,<3.12"
 dependencies = [
     "numpy",
     "pandas",
@@ -19,6 +19,12 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+task = [
+    "psychopy",
+]
 dev = [
     "pytest>=8.0",
+    "nbconvert",
+    "ipykernel",
+    "notebook",
 ]

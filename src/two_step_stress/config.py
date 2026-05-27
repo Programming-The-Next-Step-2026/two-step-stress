@@ -11,7 +11,9 @@ REWARD_WALK_MAX: float = 0.75      # reflecting upper boundary
 N_TRIALS_MAIN: int = 200       # total main-task trials
 N_BLOCKS: int = 4              # number of blocks
 N_TRIALS_PER_BLOCK: int = 50   # N_TRIALS_MAIN / N_BLOCKS
-N_TRIALS_PRACTICE: int = 20    # practice trials with explicit transition feedback
+N_TRIALS_PRACTICE: int = 12       # practice trials (8 no-load + 4 load); reduced from 20 — see docs/psychopy_plan.md §5
+N_PRACTICE_NO_LOAD: int = 8       # no-load practice trials (shown first)
+N_PRACTICE_LOAD: int = 4          # load practice trials (shown after)
 
 # Response keys
 KEY_LEFT: str = "f"   # Stage-1 and Stage-2 left choice
@@ -24,7 +26,8 @@ STAGE1_WINDOW_MS: int = 2000
 STAGE2_WINDOW_MS: int = 2000
 ITI_MS: int = 1000
 FEEDBACK_MS: int = 1000
-NBACK_LETTER_MS: int = 500  # duration the 1-back letter is displayed
+NBACK_LETTER_MS: int = 500       # duration the 1-back letter is displayed
+TRANSITION_REVEAL_MS: int = 700  # Stage-1 → Stage-2 transition reveal (planet arrival)
 
 # Cognitive-load block structure
 N_LOAD_BLOCKS: int = 2

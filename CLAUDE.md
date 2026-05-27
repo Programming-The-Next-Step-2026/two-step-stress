@@ -69,18 +69,18 @@ Keep modules small and single-purpose. The trial loop in `trial.py` should be re
 
 All live in `config.py`:
 
-- **Trials.** 200 main trials, split into 4 blocks of 50 with breaks. 20 practice trials with explicit transition feedback.
+- **Trials.** 200 main trials, split into 4 blocks of 50 with breaks. 12 practice trials (8 no-load + 4 load) with explicit transition feedback.
 - **Transitions.** Common p = 0.7, rare p = 0.3. Each Stage-1 action has its own preferred Stage-2 state. Mapping fixed per participant, counterbalanced across participants.
 - **Reward probabilities.** Four independent Gaussian random walks, σ = 0.025, reflecting boundaries [0.25, 0.75], independent seeds per participant logged to data.
 - **Reward.** Binary (1/0).
-- **Timing.** Stage-1 response window 2000 ms, Stage-2 response window 2000 ms, ITI 1000 ms, feedback 1000 ms. Use frame-locked presentation (`win.flip()`-driven), not `core.wait`, for stimulus onsets that matter.
+- **Timing.** Stage-1 response window 2000 ms, Stage-2 response window 2000 ms, transition reveal 700 ms, ITI 1000 ms, feedback 1000 ms. Use frame-locked presentation (`win.flip()`-driven), not `core.wait`, for stimulus onsets that matter.
 - **Cognitive load.** Within-subject, blocked (not interleaved trial-by-trial — too noisy). 2 load blocks and 2 no-load blocks, order ABBA / BAAB counterbalanced. In load blocks: a letter appears for 500 ms at trial start; participant must indicate (key press) whether it matches the letter from the *previous* trial in that block (1-back). The 1-back response is collected during the Stage-1 decision window. Letters drawn from a fixed consonant set; ~33% match rate.
 - **Keys.** Stage-1/Stage-2 choice on `f` / `j`. 1-back match/no-match on `z` / `m`. Document in instructions and store in config.
 - **Cover story.** Spaceships → planets → aliens with treasure (Decker et al., 2016). Same in load and no-load.
 
 ## Data schema
 
-One CSV per participant in `data/sub-<id>_<timestamp>.csv`. One row per trial. Columns:
+One CSV per participant in `data/raw/sub-<id>_<timestamp>.csv`. One row per trial. Columns:
 
 `participant_id, block, block_type (load|no_load), trial_in_block, trial_global, stage1_choice, stage1_rt, transition (common|rare), stage2_state, stage2_choice, stage2_rt, reward, reward_probs (json of 4 floats at trial start), nback_letter, nback_is_match, nback_response, nback_correct, nback_rt, timestamp`
 

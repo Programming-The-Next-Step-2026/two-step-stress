@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from two_step_stress.config import P_COMMON, P_RARE
+from two_step_stress.config import P_COMMON
 
 # A transition mapping is a dict[int, int] whose keys are Stage-1 actions
 # (0 or 1) and whose values are the *commonly* associated Stage-2 states
