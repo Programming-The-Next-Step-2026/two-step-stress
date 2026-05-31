@@ -10,7 +10,7 @@ A PsychoPy implementation of the Daw et al. (2011) two-step task with a within-s
 
 **Context.** Graduate psychology coursework (programming + experiment design). The task itself runs locally; analysis is in Python. This is *paradigm validation in healthy volunteers*, not a clinical study.
 
-**Background reading.** See `docs/literature_review.md` for the full review. Key papers for implementation: Daw et al. (2011, *Neuron*); Otto et al. (2013, *Psych Sci*); Decker et al. (2016, *Psych Sci*) for the spaceship cover story; Kool, Cushman & Gershman (2016, *PLOS Comp Biol*) and Feher da Silva & Hare (2018, *PLOS ONE*) for methodological caveats to acknowledge in the write-up.
+**Background reading.** Key papers for implementation: Daw et al. (2011, *Neuron*); Otto et al. (2013, *Psych Sci*); Decker et al. (2016, *Psych Sci*) for the spaceship cover story; Kool, Cushman & Gershman (2016, *PLOS Comp Biol*) and Feher da Silva & Hare (2018, *PLOS ONE*) for methodological caveats to acknowledge in the write-up.
 
 ## Stack
 
@@ -31,7 +31,7 @@ src/two_step_stress/
     config.py             # all task parameters in one place
     task/
         __init__.py
-        stimuli.py        # stimulus loading and construction
+        screens.py        # stimulus builders + draw helpers
         transitions.py    # Stage-1 → Stage-2 transition logic
         rewards.py        # drifting reward-probability walks
         nback.py          # 1-back letter stream + response collection
@@ -41,7 +41,6 @@ src/two_step_stress/
     analysis/
         __init__.py
         stay_probability.py   # 2x2 stay analysis + logistic regression
-        simulate_agent.py     # MB/MF/hybrid agents for sanity-checking
         plots.py
     io/
         __init__.py
@@ -50,10 +49,8 @@ tests/
     test_transitions.py
     test_rewards.py
     test_nback.py
-    test_simulate_agent.py
 docs/
-    literature_review.md
-    pre_registration.md   # OSF draft
+    two_step_stress_tutorial.ipynb  # vignette / tutorial
 data/                     # gitignored; per-participant CSVs land here
 notebooks/                # exploratory only; not part of the package
 pyproject.toml
@@ -102,7 +99,7 @@ Never overwrite an existing participant file. Append a numeric suffix if the fil
 
 PsychoPy code that touches the screen is hard to unit-test, so:
 
-- **Pure-logic modules** (`transitions.py`, `rewards.py`, `nback.py` letter-stream generator, `simulate_agent.py`, `stay_probability.py`) are fully unit-tested.
+- **Pure-logic modules** (`transitions.py`, `rewards.py`, `nback.py` letter-stream generator, `stay_probability.py`) are fully unit-tested.
 - **Trial-loop integration** is tested by running the simulated agent through the same `transitions` + `rewards` code the live task uses, then checking that a model-based agent produces the textbook reward × transition interaction and a model-free agent does not. This is the single most important test in the repo — if it fails, the task is broken.
 - Run `pytest` before any commit that touches logic.
 
@@ -112,7 +109,7 @@ PsychoPy code that touches the screen is hard to unit-test, so:
 
 1. **2 × 2 stay-probability plot** — P(repeat Stage-1 choice) by previous reward (yes/no) × previous transition (common/rare), separately for load and no-load blocks. This is the headline figure.
 2. **Logistic regression** (statsmodels) of `stay ~ prev_reward * prev_transition * load`, with participant random effects if mixed-effects (`statsmodels.MixedLM` or `pymer4`); otherwise per-participant fits aggregated.
-3. **Hybrid RL model fit** (stretch, in `simulate_agent.py` shared infrastructure): parameters β_MB, β_MF, α, λ, π. Negative log-likelihood minimised with `scipy.optimize.minimize` (L-BFGS-B, parameter bounds, ≥10 random starts). Compare against pure-MB and pure-MF nested models via AIC/BIC. The headline test is whether β_MB is lower under load.
+3. **Hybrid RL model fit** (stretch goal — not implemented): parameters β_MB, β_MF, α, λ, π. Negative log-likelihood minimised with `scipy.optimize.minimize` (L-BFGS-B, parameter bounds, ≥10 random starts). Compare against pure-MB and pure-MF nested models via AIC/BIC. The headline test is whether β_MB is lower under load.
 4. **1-back accuracy** as a manipulation check — load blocks should show non-trivial dual-task cost; report mean accuracy and exclude participants below chance.
 
 ## Workflow rules for Claude Code
@@ -122,7 +119,7 @@ PsychoPy code that touches the screen is hard to unit-test, so:
 - **Don't run the PsychoPy window in automated workflows** — it requires a display. Use the simulated agent for end-to-end checks.
 - **Don't commit anything in `data/`.** It's gitignored; double-check.
 - **Don't pull in new dependencies without updating `pyproject.toml` and explaining why in the commit.**
-- **If a task parameter is changed, update `config.py` *and* the relevant section of this file *and* `docs/pre_registration.md` if pre-registration has been finalised.**
+- **If a task parameter is changed, update `config.py` *and* the relevant section of this file.**
 - **Stop and ask** if a request would: change the pre-registered analysis after data collection has started; remove the cognitive-load manipulation; switch to PsychoPy Builder; introduce a web/online deployment.
 
 ## Branch and PR conventions
