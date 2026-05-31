@@ -1,5 +1,6 @@
 data/
 figures/
+docs/architecture.*    # local-only demo cheat-sheet (md + rendered html/pdf)
 __pycache__/
 *.py[cod]
 *.egg-info/
